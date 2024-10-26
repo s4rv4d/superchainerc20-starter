@@ -20,12 +20,15 @@ contract SuperchainERC20Test is Test {
     address internal constant ZERO_ADDRESS = address(0);
     address internal constant SUPERCHAIN_TOKEN_BRIDGE = Predeploys.SUPERCHAIN_TOKEN_BRIDGE;
     address internal constant MESSENGER = Predeploys.L2_TO_L2_CROSS_DOMAIN_MESSENGER;
+    uint256[] allowedChains = new uint256[](2);
 
     SuperchainERC20 public superchainERC20;
 
     /// @notice Sets up the test suite.
     function setUp() public {
-        superchainERC20 = new L2NativeSuperchainERC20(address(this), "Test", "TEST", 18);
+        allowedChains[0] = 901;
+        allowedChains[1] = 902;
+        superchainERC20 = new L2NativeSuperchainERC20(address(this), "Test", "TEST", 18, allowedChains);
     }
 
     /// @notice Helper function to setup a mock and expect a call to it.

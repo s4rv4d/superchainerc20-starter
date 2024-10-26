@@ -19,6 +19,11 @@ contract SuperchainERC20Deployer {
     Vm private constant vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
 
     function deployL2NativeSuperchainERC20() public broadcast returns (address addr_) {
+
+        uint256[] memory allowedChains = new uint256[](2);
+        allowedChains[0] = 901;
+        allowedChains[1] = 902;
+
         address owner = vm.envAddress("ERC20_OWNER_ADDRESS");
         string memory name = vm.envString("ERC20_NAME");
         string memory symbol = vm.envString("ERC20_SYMBOL");
@@ -26,7 +31,7 @@ contract SuperchainERC20Deployer {
         bytes memory erc20InitCode = type(L2NativeSuperchainERC20).creationCode;
         addr_ = ICreateX(Preinstalls.CreateX).deployCreate3({
             salt: implSalt(),
-            initCode: abi.encodePacked(erc20InitCode, abi.encode(owner, name, symbol, decimals))
+            initCode: abi.encodePacked(erc20InitCode, abi.encode(owner, name, symbol, decimals, allowedChains))
         });
         console.log("Deployed L2NativeSuperchainERC20 at address: ", addr_, "on chain id: ", block.chainid);
     }
